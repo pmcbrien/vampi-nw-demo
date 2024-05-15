@@ -25,8 +25,9 @@ jobs:
           --add-host=host.docker.internal:host-gateway 
           -e ACTIVE_CONFIG_FILE_PATH=/noname/config.json 
           -v $(pwd)/noname:/noname 
-          -v $(pwd)/openapi_specs:/openapi_specs 
-          ${{ secrets.ACTIVE_REGISTRY_URL }}/active-cli:$(curl -k ${{secrets.ACTIVE_API_URL}}/backend/version) scan 
+          -v $(pwd)/openapi_specs:/openapi_specs
+          ${{ secrets.ACTIVE_REGISTRY_URL }}/active-cli:2.16.11 scan 
+          #${{ secrets.ACTIVE_REGISTRY_URL }}/active-cli:$(curl -k ${{secrets.ACTIVE_API_URL}}/backend/version) scan 
           --api-url=${{ secrets.ACTIVE_API_URL }} 
           --api-token=${{ secrets.ACTIVE_API_TOKEN }} 
           --test-group-id=62f5921c-d200-4f6f-a104-29674ad30a94
