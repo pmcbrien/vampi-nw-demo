@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "applicationId": "1ca5f182-7871-4c77-8e01-5cba65a5dbb3",
   "host": "http://host.docker.internal:5002",
   "sources": [
