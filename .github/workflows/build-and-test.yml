@@ -1,40 +1,24 @@
-name: Build pipeline with security test
+name: Verbose Curl Request Workflow
+
 on:
   push:
-  repository_dispatch:
-  workflow_dispatch:
+    branches:
+      - master
 
 jobs:
-  scan:
+  verbose_curl_request_job:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name: Docker login
-        uses: docker/login-action@v3 
-        with:
-          registry: ${{ secrets.ACTIVE_REGISTRY_URL }} 
-          username: ${{ secrets.ACTIVE_REGISTRY_USER }} 
-          password: ${{ secrets.ACTIVE_REGISTRY_TOKEN }}
-      
-      - name: Active Testing Scan
-        run: >
-          docker run 
-          --add-host=host.docker.internal:host-gateway 
-          -e ACTIVE_CONFIG_FILE_PATH=/noname/config.json 
-          -v $(pwd)/noname:/noname 
-          -v $(pwd)/openapi_specs:/openapi_specs
-          ${{ secrets.ACTIVE_REGISTRY_URL }}/active-cli:2.19.3 scan 
-          --api-url=${{ secrets.ACTIVE_API_URL }} 
-          --api-token=${{ secrets.ACTIVE_API_TOKEN }} 
-          --test-group-id=62f5921c-d200-4f6f-a104-29674ad30a94
-          --branch-name=${{ github. head_ref || github. ref_name }}
-          --severity-threshold=none
-  deploy:
-    needs: scan 
-    runs-on: ubuntu-latest 
-    steps:
-      - name: echo
-        run: echo Security scan passed, deploying to production
+
+      - name: Make verbose curl request and print detailed response
+        run: |
+          echo "Starting curl request to the endpoint..."
+          response=$(curl -v -w "\nHTTP Status: %{http_code}\n" -o response_body.txt https://www.google.com/endpoint 2>&1)
+          echo "Curl command output:"
+          echo "$response"
+          echo "Response Body:"
+          cat response_body.txt
+          echo "Curl request completed."
